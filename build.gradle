@@ -1,10 +1,15 @@
-apply plugin: 'java'
+apply plugin : 'java'
 
-repositories {
-    mavenCentral()
+subprojects {
+    apply plugin : 'java'
+    group = 'org.tju.HFDemo'
+    version = '0.0.1-SNAPSHOT'
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        testCompile 'junit:junit:4.12'
+    }
 }
-
-dependencies {
-    testCompile 'junit:junit:4.12'
-}
-
