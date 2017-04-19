@@ -1,4 +1,6 @@
-import config.Config;
+package org.tju.HFDemo.common.config;
+
+import org.tju.HFDemo.common.AbstractTest;
 import org.junit.Test;
 import static org.junit.Assert.*;
 

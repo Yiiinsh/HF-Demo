@@ -1,4 +1,4 @@
-package config;
+package org.tju.HFDemo.common.config;
 
 import org.apache.commons.configuration2.CompositeConfiguration;
 import org.apache.commons.configuration2.Configuration;
@@ -9,6 +9,7 @@ import org.apache.commons.configuration2.builder.fluent.Parameters;
 import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.tju.HFDemo.common.config.Config;
 
 /**
  * Created by shaohan.yin on 17/04/2017.

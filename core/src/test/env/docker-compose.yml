@@ -1,0 +1,58 @@
+version: '2'
+
+services:
+  ca-tju:
+    container_name: ca_tju
+    image: hyperledger/fabric-ca
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+    ports:
+      - "7054:7054"
+    command: sh -c 'fabric-ca-server start -c /etc/hyperledger/fabric-ca-config/fabric-ca-client-config.yaml -b admin:adminpw -d'
+    volumes:
+      - ./ca/:/etc/hyperledger/fabric-ca-config
+
+#  orderer:
+#    container_name: orderer
+#    image: hyperledger/fabric-orderer
+#    environment:
+#    working_dir:
+#    command: orderer
+#    ports:
+#      - "7050:7050"
+#    volumes:
+#
+#  peer-tju:
+#    container-name: peer-tju
+#    image: hyperledger/fabric-peer
+#    environment:
+#    working_dir:
+#    command: peer node start --peer-defaultchain=false
+#    ports:
+#      - 7051:7051
+#      - 7053:7053
+#    volumes:
+#    depends_on:
+#      - orderer
+#
+#  peer-company-a:
+#      container-name: peer-company-a
+#      image: hyperledger/fabric-peer
+#      environment:
+#      working_dir:
+#      command: peer node start --peer-defaultchain=false
+#      ports:
+#      volumes:
+#      depends_on:
+#        - orderer
+#
+#  peer-company-b:
+#      container-name: peer-company-b
+#      image: hyperledger/fabric-peer
+#      environment:
+#      working_dir:
+#      command: peer node start --peer-defaultchain=false
+#      ports:
+#      volumes:
+#      depends_on:
+#        - orderer

@@ -1,4 +1,4 @@
-package config;
+package org.tju.HFDemo.common.config;
 
 import org.apache.commons.configuration2.ImmutableConfiguration;
 

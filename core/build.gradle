@@ -1,0 +1,6 @@
+dependencies {
+    compile ('org.hyperledger.fabric-sdk-java:fabric-sdk-java:1.0.0-SNAPSHOT') {
+        exclude group:'log4j', module:'log4j'
+    }
+    compile project(':common')
+}
