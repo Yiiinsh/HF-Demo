@@ -4,12 +4,10 @@ debug: false
 
 tls:
   enabled: false
-  certfile: ca_tju-cert.pem
-  keyfile: ca_tju-key.pem
 
 ca:
-  certfile: ca_tju-cert.pem
-  keyfile: ca_tju-key.pem
+  certfile: tju-cert.pem
+  keyfile: d8a5b3cac1b821f6e4b487ceaf1fd239cdcfc310894150908b90f05e9179556a_sk
 
 registry:
   maxEnrollments: 0
@@ -33,6 +31,12 @@ affiliations:
   tju:
     - student
     - teacher
+  company-a:
+    - admin
+    - user
+  company-b:
+    - admin
+    - user
 
 
 #signing:
