@@ -1,7 +1,6 @@
 package org.tju.HFDemo.core.role;
 
 import org.hyperledger.fabric.sdk.Enrollment;
-import org.hyperledger.fabric.sdk.User;
 
 import java.io.Serializable;
 import java.util.Set;
