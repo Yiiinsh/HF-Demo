@@ -6,10 +6,10 @@ import org.apache.commons.configuration2.FileBasedConfiguration;
 import org.apache.commons.configuration2.PropertiesConfiguration;
 import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
 import org.apache.commons.configuration2.builder.fluent.Parameters;
+import org.apache.commons.configuration2.convert.DefaultListDelimiterHandler;
 import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.tju.HFDemo.common.config.Config;
 
 /**
  * Created by shaohan.yin on 17/04/2017.
@@ -32,7 +32,9 @@ public class DefaultConfig extends CompositeConfiguration implements Config {
         String defaultConfigurationName = "configurations.properties";
 
         return (new FileBasedConfigurationBuilder<FileBasedConfiguration>(PropertiesConfiguration.class)
-                .configure(params.properties().setFileName(defaultConfigurationName)))
+                .configure(params.properties()
+                        .setFileName(defaultConfigurationName)
+                        .setListDelimiterHandler(new DefaultListDelimiterHandler(','))))
                 .getConfiguration();
     }
 

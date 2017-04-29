@@ -17,7 +17,7 @@ services:
     container_name: orderer.example.com
     image: hyperledger/fabric-orderer:x86_64-1.0.0-alpha
     environment:
-      - ORDERER_GENERAL_LOGLEVEL=error
+      - ORDERER_GENERAL_LOGLEVEL=info
       - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
       - ORDERER_GENERAL_GENESISMETHOD=file
       - ORDERER_GENERAL_GENESISFILE=/var/hyperledger/orderer/orderer.block
@@ -125,7 +125,7 @@ services:
       - CORE_PEER_GOSSIP_IGNORESECURITY=true
       - CORE_PEER_LOCALMSPID=Org0MSP
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
-    command: /bin/bash -c './scripts/script.sh ${CHANNEL_NAME}; '
+    command: /bin/bash -c './scripts/script.sh ${CHANNEL_NAME}; /bin/bash'
     volumes:
         - /var/run/:/host/var/run/
         - ./chaincodes:/opt/gopath/src/github.com/hyperledger/fabric/examples/chaincode
