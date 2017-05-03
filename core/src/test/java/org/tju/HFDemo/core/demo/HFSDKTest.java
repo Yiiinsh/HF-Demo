@@ -68,7 +68,7 @@ public class HFSDKTest extends AbstractTest {
             logger.debug("[setUp][register userA]");
             RegistrationRequest rr = new RegistrationRequest(getConfig(TEST_USER_USERA_NAME_KEY), getConfig(TEST_USER_USERA_AFFILIATION_KEY));
             rr.setMaxEnrollments(0);
-            rr.setSecret(getConfig(TEST_USER_USERA_PASSWORD_KEY));
+            rr.setSecret(getConfig(TEST_USER_USERA_PASSWORD_KEY));;
             caClient.register(rr, admin);
             userA = new TestUser(getConfig(TEST_USER_USERA_NAME_KEY));
             userA.setMSPID(getConfig(TEST_USER_MSPID_KEY));
