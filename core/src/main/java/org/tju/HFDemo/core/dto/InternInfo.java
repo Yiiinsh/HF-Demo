@@ -11,6 +11,7 @@ public class InternInfo {
     private String workingId;
     private String company;
     private String department;
+    private String position;
     private Date start;
     private Date end;
 
