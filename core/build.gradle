@@ -3,4 +3,5 @@ dependencies {
         exclude group:'log4j', module:'log4j'
     }
     compile project(':common')
+    compile 'com.google.code.gson:gson:2.8.0'
 }

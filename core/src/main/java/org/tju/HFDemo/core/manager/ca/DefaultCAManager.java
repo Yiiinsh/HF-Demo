@@ -7,6 +7,7 @@ import org.tju.HFDemo.core.exception.HFDRuntimeException;
 import org.tju.HFDemo.core.exception.InvalidEnrollException;
 import org.tju.HFDemo.core.manager.AbstractManager;
 import org.tju.HFDemo.core.role.User;
+import org.tju.HFDemo.core.utils.SecretUtil;
 
 import java.net.MalformedURLException;
 
@@ -18,7 +19,7 @@ public class DefaultCAManager extends AbstractManager implements CAManager {
 
     public DefaultCAManager() throws ComponentSetupException {
         try {
-            hfcaClient = new HFCAClient(getConfig("ca.location"), null);
+            hfcaClient = new HFCAClient(config.getCALocation(), null);
         } catch (MalformedURLException e) {
             logger.error("[DefaultCAManager][fail]", e);
             throw new ComponentSetupException("Fail to setup CAManager");
@@ -32,11 +33,10 @@ public class DefaultCAManager extends AbstractManager implements CAManager {
     @Override
     public User enroll(String userName, String passwd) {
         User user = User.newDefaultUser(userName);
-        // TODO: set up user info
-        user.setAffiliation(getConfig("user.affiliation"));
-        user.setMSPID(getConfig("user.mspid"));
+        user.setAffiliation(config.getUserAffiliation());
+        user.setMSPID(config.getUserMSPID());
         try {
-            user.setEnrollment(hfcaClient.enroll(userName, passwd));
+            user.setEnrollment(hfcaClient.enroll(userName, SecretUtil.secretHash(passwd)));
         } catch (Exception e) {
             logger.error("[enroll][fail]", e);
             throw new InvalidEnrollException(String.format("Fail to enroll user:%s with password:%s", userName, passwd));
@@ -46,10 +46,9 @@ public class DefaultCAManager extends AbstractManager implements CAManager {
 
     @Override
     public void register(String userName, String passwd, User registar) {
-        // TODO: set up config
         try {
-            RegistrationRequest rr = new RegistrationRequest(userName, getConfig("affiliation"));
-            rr.setSecret(passwd);
+            RegistrationRequest rr = new RegistrationRequest(userName, config.getUserAffiliation());
+            rr.setSecret(SecretUtil.secretHash(passwd));
             rr.setMaxEnrollments(0);
             hfcaClient.register(rr, registar);
         } catch (Exception e) {

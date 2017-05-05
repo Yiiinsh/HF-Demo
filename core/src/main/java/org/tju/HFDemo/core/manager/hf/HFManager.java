@@ -14,5 +14,5 @@ public interface HFManager {
     StudentInfo getStudentInfo(User user, String id);
     List<StudentInfo> getStudentInfoBatch(User user, String startId, String endId);
     void updateStudentInfo(User user, StudentInfo studentInfo);
-    void removeStudentInfo(User user, StudentInfo studentInfo);
+    void removeStudentInfo(User user, String id);
 }
