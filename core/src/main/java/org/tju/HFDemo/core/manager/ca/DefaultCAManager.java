@@ -2,7 +2,6 @@ package org.tju.HFDemo.core.manager.ca;
 
 import org.hyperledger.fabric_ca.sdk.HFCAClient;
 import org.hyperledger.fabric_ca.sdk.RegistrationRequest;
-import org.tju.HFDemo.core.exception.ComponentSetupException;
 import org.tju.HFDemo.core.exception.HFDRuntimeException;
 import org.tju.HFDemo.core.exception.InvalidEnrollException;
 import org.tju.HFDemo.core.manager.AbstractManager;
@@ -17,12 +16,11 @@ import java.net.MalformedURLException;
 public class DefaultCAManager extends AbstractManager implements CAManager {
     private HFCAClient hfcaClient;
 
-    public DefaultCAManager() throws ComponentSetupException {
+    public DefaultCAManager() {
         try {
             hfcaClient = new HFCAClient(config.getCALocation(), null);
         } catch (MalformedURLException e) {
             logger.error("[DefaultCAManager][fail]", e);
-            throw new ComponentSetupException("Fail to setup CAManager");
         }
     }
 

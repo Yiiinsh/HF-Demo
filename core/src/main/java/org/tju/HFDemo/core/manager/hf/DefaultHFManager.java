@@ -31,7 +31,7 @@ public class DefaultHFManager extends AbstractManager implements HFManager {
     private Map<String, ChainCodeID> chainCodeIDs = new HashMap<>();
     private User admin;
 
-    DefaultHFManager() {
+    public DefaultHFManager() {
         loadChain();
         loadAdmin();
     }
