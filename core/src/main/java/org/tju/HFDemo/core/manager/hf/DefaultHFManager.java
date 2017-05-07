@@ -32,8 +32,13 @@ public class DefaultHFManager extends AbstractManager implements HFManager {
     private User admin;
 
     public DefaultHFManager() {
-        loadChain();
+        try {
+            client.setCryptoSuite(CryptoSuite.Factory.getCryptoSuite());
+        } catch (Exception e) {
+            logger.error("[DefaultHFManager][setup][fail]", e);
+        }
         loadAdmin();
+        loadChain();
     }
 
     private void loadChain() {

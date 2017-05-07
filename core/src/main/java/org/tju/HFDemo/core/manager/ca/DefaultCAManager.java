@@ -1,5 +1,6 @@
 package org.tju.HFDemo.core.manager.ca;
 
+import org.hyperledger.fabric.sdk.security.CryptoSuite;
 import org.hyperledger.fabric_ca.sdk.HFCAClient;
 import org.hyperledger.fabric_ca.sdk.RegistrationRequest;
 import org.tju.HFDemo.core.exception.HFDRuntimeException;
@@ -19,6 +20,7 @@ public class DefaultCAManager extends AbstractManager implements CAManager {
     public DefaultCAManager() {
         try {
             hfcaClient = new HFCAClient(config.getCALocation(), null);
+            hfcaClient.setCryptoSuite(CryptoSuite.Factory.getCryptoSuite());
         } catch (MalformedURLException e) {
             logger.error("[DefaultCAManager][fail]", e);
         }
