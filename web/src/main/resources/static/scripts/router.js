@@ -78,19 +78,4 @@ index_module.config(function ($stateProvider, $urlRouterProvider) {
         	templateUrl: 'views/index/migration_details_content.html',
         	controller : 'ActiveDcMigrationEventDetailsContentCtl'
         });
-})
-.run(['$rootScope', '$state', '$stateParams', function($rootScope, $state, $stateParams) {
-    $rootScope.$on('$stateChangeStart', function(event, toState, toStateParams) {
-        if(!allowAnonymous) {
-            if(!$rootScope.currentUser) {
-                event.preventDefault();
-                $state.go('login');
-            } else {
-                if(!$rootScope.currentUser.token) {
-                    event.preventDefault();
-                    $state.go('login');
-                }
-            }
-        }
-    });
-}]);
+});

@@ -1,0 +1,117 @@
+<div class="col-md-8 col-md-offset-2">
+    <h3 class="header smaller lighter blue">
+        <span>Student Info</span>
+    </h3>
+
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <span>Student Info</span>
+        </div>
+        <div class="panel-body">
+            <div class="form-horizontal">
+
+                <div class="form-group">
+                    <label class="col-sm-4 control-label no-padding-right">Student ID:</label>
+                    <div class="col-sm-7">
+                        <label ng-bind="currentUser.id"></label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-4 control-label no-padding-right">Student Name:</label>
+                    <div class="col-sm-7">
+                        <label ng-bind="currentUser.id"></label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-4 control-label no-padding-right">University:</label>
+                    <div class="col-sm-7">
+                        <label ng-bind="currentUser.id"></label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-4 control-label no-padding-right">Degree:</label>
+                    <div class="col-sm-7">
+                        <label ng-bind="currentUser.id"></label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-4 control-label no-padding-right">Enroll Date:</label>
+                    <div class="col-sm-7">
+                        <label ng-bind="currentUser.id"></label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-4 control-label no-padding-right">Graduate Date:</label>
+                    <div class="col-sm-7">
+                        <label ng-bind="currentUser.id"></label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-4 control-label no-padding-right">Education Qualifications:</label>
+                    <div class="col-sm-7">
+                        <ul class="nav nav-tabs padding-18 tab-size-bigger">
+                            <li ng-repeat="education in ['a', 'b', 'c']">
+                                <span ng-bind="education"></span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-4 control-label no-padding-right">Internship:</label>
+                    <div class="col-sm-7">
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        WorkingId
+                                    </th>
+                                    <th>
+                                        Company
+                                    </th>
+                                    <th>
+                                        Department
+                                    </th>
+                                    <th>
+                                        Position
+                                    </th>
+                                    <th>
+                                        Start Date
+                                    </th>
+                                    <th>
+                                        End Date
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="intern in interns">
+                                    <td ng-bind="intern.workingId">
+                                    </td>
+                                    <td ng-bind="intern.company">
+                                    </td>
+                                    <td ng-bind="intern.department">
+                                    </td>
+                                    <td ng-bind="intern.position">
+                                    </td>
+                                    <td ng-bind="intern.startDate">
+                                    </td>
+                                    <td ng-bind="intern.endDate">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-4 control-label no-padding-right"></label>
+                    <div class="col-sm-7">
+                        <a href="" class="btn btn-warning" type="button">
+                            修改
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
