@@ -1,5 +1,5 @@
 index_module.config(function ($stateProvider, $urlRouterProvider) {
-    $urlRouterProvider.otherwise("/login");
+    $urlRouterProvider.otherwise("/index");
     $stateProvider
         .state('index', {
             url: '/index',
@@ -12,6 +12,24 @@ index_module.config(function ($stateProvider, $urlRouterProvider) {
             templateUrl: 'views/index/login.html',
             controller: 'LoginCtl',
             allowAnonymous: true
+        })
+        .state('student_info', {
+            url: '/student/info',
+            templateUrl: 'views/index/student_info.html',
+            controller: 'StudentInfoCtl',
+            allowAnonymous: false
+        })
+        .state('student_info_update', {
+            url: '/student/info/update',
+            templateUrl: 'views/index/student_info_update.html',
+            controller: 'StudentInfoUpdateCtl',
+            allowAnonymous: false
+        })
+        .state('internship_info', {
+            url: '/internship/info',
+            templateUrl: 'views/index/internship_info.html',
+            controller: 'InternshipInfoCtl',
+            allowAnonymous: false
         })
         .state('cluster_shards', {
             url: '/cluster_shards?clusterName',

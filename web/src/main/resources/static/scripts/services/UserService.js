@@ -4,36 +4,22 @@ services.service('UserService', ['$resource', '$q', function ($resource, $q) {
             method: 'POST',
             url: '/user/login'
         },
-
-        get_current_user: {
-            method: 'GET',
-            url: '/console/user/current'
-        },
         logout: {
-            method: 'GET',
-            url: '/console/user/logout'
+            method: 'POST',
+            url: '/user/logout'
         }
     });
 
-    function getCurrentUser() {
+    function logout(userId, token) {
         var d = $q.defer();
-        resource.get_current_user({},
-                                  function (result) {
-                                      d.resolve(result);
-                                  }, function (result) {
-                d.reject(result);
-            });
-        return d.promise;
-    }
-
-    function logout() {
-        var d = $q.defer();
-        resource.logout({},
-                        function (result) {
-                            d.resolve(result);
-                        }, function (result) {
-                d.reject(result);
-            });
+        resource.logout({},{
+            userId: userId,
+            token: token
+        }, function (result) {
+           d.resolve(result);
+           }, function (result) {
+            d.reject(result);
+        });
         return d.promise;
     }
 
@@ -52,7 +38,6 @@ services.service('UserService', ['$resource', '$q', function ($resource, $q) {
 
     return {
         login: login,
-        getCurrentUser: getCurrentUser,
         logout: logout
     }
 }]);

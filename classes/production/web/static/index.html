@@ -33,46 +33,48 @@
 
 			<div class="navbar-buttons navbar-header pull-right" role="navigation" ng-if="currentUser">
 				<ul class="nav ace-nav">
-					<li class="purple">
-						<a data-toggle="dropdown" class="dropdown-toggle" href="" title="Student Info">
+					<li class="purple" uib-dropdown>
+						<a data-toggle="dropdown" class="dropdown-toggle" href="" title="Student Info" uib-dropdown-toggle>
 							<i class="ace-icon fa fa-gavel"></i> <span>Student Info</span>
 						</a>
-						<ul class="dropdown-menu-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
+						<ul class="dropdown-menu-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close" uib-dropdown-menu>
 							<li>
-								<!--<a ui-sref="" title="Info">-->
+								<a ui-sref="/#/student/info" title="Info">
 								<i class="btn btn-xs no-hover btn-pink fa fa-bell"></i>
 								<span>Info</span>
 								<br/>
-								<!--</a>-->
+								</a>
 							</li>
 							<li>
-								<!--<a ui-sref="" title="Modification">-->
+								<a ui-sref="/#/student/info/update" title="Modification">
 								<i class="btn btn-xs no-hover btn-purple fa fa-inbox"></i>
 								<span>Modification</span>
 								<br/>
-								<!--</a>-->
+								</a>
 							</li>
 						</ul>
 					</li>
 				
 					<li class="grey">
-						<!--<a ui-sref="" title="Internship">-->
+						<a ui-sref="/#/internship/info" title="Internship">
 							<i class="ace-icon fa fa-info-circle"></i> <span>Internship Info</span>
-						<!--</a>-->
+						</a>
 					</li>
 
-					<li class="dark-blue">
-						<a data-toggle="dropdown" href="#" class="dropdown-toggle"> 
+					<li class="dark-blue" uib-dropdown>
+						<a data-toggle="dropdown" href="#" class="dropdown-toggle" uib-dropdown-toggle> 
 							<i class="ace-icon fa fa-coffee"></i> 
 							<span class="user-info">
 									<small>欢迎,</small>{{currentUser.id}}
 							</span> 
 							<i class="ace-icon fa fa-caret-down"></i>
 						</a>
-						<ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
+						<ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close" uib-dropdown-menu>
 							<li>
-								<a href="/user/logout"><i class="ace-icon fa fa-power-off"></i>
-									注销
+								<a  ng-click="logout()" title="Logout">
+									<i class="ace-icon fa fa-power-off"></i>
+									<span>Logout</span>
+									<br/>
 								</a>
 							</li>
 						</ul>
@@ -84,9 +86,9 @@
 
 	<div class="main-container" ng-controller="IndexCtl">
 		<div class="main-content" style="padding-top: 25px;" ui-view></div>
-		<!--<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse"> -->
-			<!--<i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>-->
-		<!--</a>-->
+		<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse"> 
+			<i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+		</a>
 	</div>
 
 	<script src='./vendor/js/jquery.min.js'></script>
