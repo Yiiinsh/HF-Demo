@@ -1,6 +1,5 @@
 package org.tju.HFDemo.core.dto;
 
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -12,8 +11,8 @@ public class StudentInfo {
     private String name;
     private String university;
     private String degree;
-    private Date start;
-    private Date end;
+    private String start;
+    private String end;
     private List<String> educationQualifications = new LinkedList<>();
     private List<InternInfo> internInfos = new LinkedList<>();
 
@@ -49,19 +48,19 @@ public class StudentInfo {
         this.degree = degree;
     }
 
-    public Date getStart() {
+    public String getStart() {
         return start;
     }
 
-    public void setStart(Date start) {
+    public void setStart(String start) {
         this.start = start;
     }
 
-    public Date getEnd() {
+    public String getEnd() {
         return end;
     }
 
-    public void setEnd(Date end) {
+    public void setEnd(String end) {
         this.end = end;
     }
 

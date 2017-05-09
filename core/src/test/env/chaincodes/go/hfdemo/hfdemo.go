@@ -1,12 +1,8 @@
-package hfdemo
+package main
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
-	"strconv"
-	"strings"
-	"time"
 
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	pb "github.com/hyperledger/fabric/protos/peer"
@@ -46,6 +42,7 @@ func main() {
 
 // Init initializes chaincode
 func (t *TJUStudentInfoChainCode) Init(stub shim.ChaincodeStubInterface) pb.Response {
+	fmt.Printf("Init demo")
 	return shim.Success(nil)
 }
 
@@ -55,7 +52,6 @@ func (t *TJUStudentInfoChainCode) Invoke(stub shim.ChaincodeStubInterface) pb.Re
 	fmt.Println("invoke is running:" + function)
 
 	// function handler
-	// TODO: batch operations
 	if function == "insert"  {
 		return t.insert(stub, args)
 	} else if function == "insertBatch" {
@@ -68,11 +64,13 @@ func (t *TJUStudentInfoChainCode) Invoke(stub shim.ChaincodeStubInterface) pb.Re
 		return t.update(stub, args)
 	} else if function == "updateBatch" {
 		return t.updateBatch(stub, args)
+	} else if function == "query" {
+		return t.query(stub, args)
 	}
 
 
 	fmt.Println("invoke did not find func:" + function) //error
-	return shim.Error("Received unknown function invocation")
+	return shim.Error("Received unknown function invocation:" + function)
 }
 
 func (t *TJUStudentInfoChainCode) insert(stub shim.ChaincodeStubInterface, args []string) pb.Response {
@@ -83,7 +81,7 @@ func (t *TJUStudentInfoChainCode) insert(stub shim.ChaincodeStubInterface, args 
 
 	// parse info from json
 	var jsonInfo Student
-	err = json.Unmarshal([]byte(info), &jsonInfo)
+	err := json.Unmarshal([]byte(info), &jsonInfo)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
@@ -95,12 +93,12 @@ func (t *TJUStudentInfoChainCode) insert(stub shim.ChaincodeStubInterface, args 
 		return shim.Error("Fail to get by " + id + " " + err.Error())
 	}
 	if tryFetch != nil {
-		fmt.Println("Id " + id + " already exists.Content:" + tryFetch)
+		fmt.Println("Id " + id + " already exists.Content:" + string(tryFetch))
 		return shim.Error("Id " + id + " already exists.")
 	}
 
 	fmt.Println("insert id:" + id + " content:" + info)
-	err = stub.PutState(id, info)
+	err = stub.PutState(id, []byte(info))
 	if err != nil {
 		return shim.Error(err.Error())
 	}
@@ -116,7 +114,7 @@ func (t *TJUStudentInfoChainCode) insertBatch(stub shim.ChaincodeStubInterface, 
 
 	// parse infos from json
 	var jsonInfo []Student
-	err = json.Unmarshal([]byte(infos), &jsonInfo)
+	err := json.Unmarshal([]byte(infos), &jsonInfo)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
@@ -129,12 +127,16 @@ func (t *TJUStudentInfoChainCode) insertBatch(stub shim.ChaincodeStubInterface, 
 			return shim.Error(err.Error())
 		}
 		if tryFetch != nil {
-			fmt.Println("Id " + id + " already exists.Content:" + tryFetch)
+			fmt.Println("Id " + id + " already exists.Content:" + string(tryFetch))
 			return shim.Error("Id " + id + " already exists.")
 		}
 
-		fmt.Println("insert id:" + id + " content:" + val)
-		err = stub.PutState(id, val)
+		jsonval, err := json.Marshal(val)
+		if err != nil {
+			return shim.Error(err.Error())
+		}
+		fmt.Println("insert id:" + id + " content:" + string(jsonval))
+		err = stub.PutState(id, jsonval)
 		if err != nil {
 			return shim.Error(err.Error())
 		}
@@ -152,7 +154,7 @@ func (t *TJUStudentInfoChainCode) remove(stub shim.ChaincodeStubInterface, args 
 	id := args[0]
 
 	fmt.Println("remove id:" + id)
-	err = stub.DelState(id)
+	err := stub.DelState(id)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
@@ -175,7 +177,7 @@ func (t *TJUStudentInfoChainCode) removeBatch(stub shim.ChaincodeStubInterface, 
 
 	for idx,val := range jsonIds {
 		fmt.Printf("remove index:%d,id:%s\n",idx,val)
-		err = stub.DelState(val)
+		err := stub.DelState(val)
 		if err != nil {
 			return shim.Error(err.Error())
 		}
@@ -194,7 +196,7 @@ func (t *TJUStudentInfoChainCode) update(stub shim.ChaincodeStubInterface, args 
 
 	// parse info from json
 	var jsonInfo Student
-	err = json.Unmarshal([]byte(info), &jsonInfo)
+	err := json.Unmarshal([]byte(info), &jsonInfo)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
@@ -210,7 +212,7 @@ func (t *TJUStudentInfoChainCode) update(stub shim.ChaincodeStubInterface, args 
 	}
 
 	fmt.Println("update id:" + id + " content:" + info)
-	err = stub.PutState(id, info)
+	err = stub.PutState(id, []byte(info))
 	if err != nil {
 		return shim.Error(err.Error())
 	}
@@ -226,7 +228,7 @@ func (t *TJUStudentInfoChainCode) updateBatch(stub shim.ChaincodeStubInterface, 
 
 	// parse infos from json
 	var jsonInfo []Student
-	err = json.Unmarshal([]byte(infos), &jsonInfo)
+	err := json.Unmarshal([]byte(infos), &jsonInfo)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
@@ -243,8 +245,12 @@ func (t *TJUStudentInfoChainCode) updateBatch(stub shim.ChaincodeStubInterface, 
 			return shim.Error("Id " + id + " not exists.")
 		}
 
-		fmt.Println("update id:" + id + " content:" + val)
-		err = stub.PutState(id, val)
+		jsonval, err := json.Marshal(val)
+		if err != nil {
+			return shim.Error(err.Error())
+		}
+		fmt.Println("update id:" + id + " content:" + string(jsonval))
+		err = stub.PutState(id, []byte(jsonval))
 		if err != nil {
 			return shim.Error(err.Error())
 		}
@@ -291,26 +297,27 @@ func (t *TJUStudentInfoChainCode) query(stub shim.ChaincodeStubInterface, args [
 }
 
 func (t *TJUStudentInfoChainCode) queryBatch(stub shim.ChaincodeStubInterface, args []string) pb.Response {
-	// query by student id
-	if len(args) < 2 {
-		return shim.Error("Incorrect number of arguments.Expected 2")
-	}
-	startId := args[0]
-	endId := args[1]
-	if startId > endId {
-		return shim.Error("Incorrect start & end for " + startId + " & " + endId)
-	}
-
-	fmt.Printf("- query batch on: \n%s-%s\n", startId, endId)
-	res, err := stub.GetStateByRange(startId, endId)
-	if err != nil {
-		return shim.Error(err.Error())
-	}
-	if res == nil {
-		return shim.Error("Fail to get state from " + startId + " to " + endId)
-	}
-	fmt.Printf("query responses:%s\n", string(res))
-
-	return shim.Success(res)
+	//// query by student id
+	//if len(args) < 2 {
+	//	return shim.Error("Incorrect number of arguments.Expected 2")
+	//}
+	//startId := args[0]
+	//endId := args[1]
+	//if startId > endId {
+	//	return shim.Error("Incorrect start & end for " + startId + " & " + endId)
+	//}
+	//
+	//fmt.Printf("- query batch on: \n%s-%s\n", startId, endId)
+	//res, err := stub.GetStateByRange(startId, endId)
+	//if err != nil {
+	//	return shim.Error(err.Error())
+	//}
+	//if res == nil {
+	//	return shim.Error("Fail to get state from " + startId + " to " + endId)
+	//}
+	//fmt.Printf("query responses:%s\n", string(res))
+	//
+	//return shim.Success(res)
+	return shim.Error("Not supported now!")
 }
 

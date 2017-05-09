@@ -27,22 +27,22 @@ setGlobals () {
 			CORE_PEER_ADDRESS=peer0.org1.example.com:7051
 			CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/cacerts/org1.example.com-cert.pem
 			CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/peers/peer0.org1.example.com
-		else 
+		else
 			CORE_PEER_ADDRESS=peer1.org1.example.com:7051
 			CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/peers/peer1.org1.example.com/cacerts/org1.example.com-cert.pem
 			CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/peers/peer1.org1.example.com
-		fi 
+		fi
 	else
 		CORE_PEER_LOCALMSPID="Org1MSP"
 		if [ $1 -eq 2 ]; then
 			CORE_PEER_ADDRESS=peer0.org2.example.com:7051
 			CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.example.com/peers/peer0.org2.example.com/cacerts/org2.example.com-cert.pem
 			CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.example.com/peers/peer0.org2.example.com
-		else 
+		else
 			CORE_PEER_ADDRESS=peer1.org2.example.com:7051
 			CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.example.com/peers/peer1.org2.example.com/cacerts/org2.example.com-cert.pem
 			CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org2.example.com/peers/peer1.org2.example.com
-		fi 
+		fi
 
 	fi
 	env |grep CORE
@@ -94,7 +94,7 @@ joinChannel () {
 installChaincode () {
 	PEER=$1
 	setGlobals $PEER
-	peer chaincode install -n mycc -v 1.0 -p github.com/hyperledger/fabric/examples/chaincode/go/chaincode_example02 >&log.txt
+	peer chaincode install -n mycc -v 1.0 -p github.com/hyperledger/fabric/examples/chaincode/go/hfdemo >&log.txt
 	res=$?
 	cat log.txt
         verifyResult $res "Chaincode installation on remote peer PEER$PEER has Failed"
@@ -106,9 +106,9 @@ instantiateChaincode () {
 	PEER=$1
 	setGlobals $PEER
         if [ -z "$CORE_PEER_TLS_ENABLED" -o "$CORE_PEER_TLS_ENABLED" = "false" ]; then
-		peer chaincode instantiate -o orderer.example.com:7050 -C $CHANNEL_NAME -n mycc -v 1.0 -c '{"Args":["init","a","100","b","200"]}' -P "OR	('Org0MSP.member','Org1MSP.member')" >&log.txt
+		peer chaincode instantiate -o orderer.example.com:7050 -C $CHANNEL_NAME -n mycc -v 1.0 -c '{"Args":["init"]}' -P "OR	('Org0MSP.member','Org1MSP.member')" >&log.txt
 	else
-		peer chaincode instantiate -o orderer.example.com:7050 --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA -C $CHANNEL_NAME -n mycc -v 1.0 -c '{"Args":["init","a","100","b","200"]}' -P "OR	('Org0MSP.member','Org1MSP.member')" >&log.txt
+		peer chaincode instantiate -o orderer.example.com:7050 --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA -C $CHANNEL_NAME -n mycc -v 1.0 -c '{"Args":["init"]}' -P "OR	('Org0MSP.member','Org1MSP.member')" >&log.txt
 	fi
 	res=$?
 	cat log.txt
@@ -124,33 +124,23 @@ chaincodeQuery () {
   local rc=1
   local starttime=$(date +%s)
 
-  # continue to poll
-  # we either get a successful response, or reach TIMEOUT
   while test "$(($(date +%s)-starttime))" -lt "$TIMEOUT" -a $rc -ne 0
   do
      sleep 3
      echo "Attempting to Query PEER$PEER ...$(($(date +%s)-starttime)) secs"
-     peer chaincode query -C $CHANNEL_NAME -n mycc -c '{"Args":["query","a"]}' >&log.txt
+     peer chaincode query -C $CHANNEL_NAME -n mycc -c '{"Args":["query","123456"]}' >&log.txt
      test $? -eq 0 && VALUE=$(cat log.txt | awk '/Query Result/ {print $NF}')
-     test "$VALUE" = "$2" && let rc=0
+     let rc=0
   done
   echo
   cat log.txt
-  if test $rc -eq 0 ; then
-	echo "===================== Query on PEER$PEER on channel '$CHANNEL_NAME' is successful ===================== "
-  else
-	echo "!!!!!!!!!!!!!!! Query result on PEER$PEER is INVALID !!!!!!!!!!!!!!!!"
-        echo "================== ERROR !!! FAILED to execute End-2-End Scenario =================="
-	echo
-	exit 1
-  fi
 }
 
 chaincodeInvoke () {
         PEER=$1
         setGlobals $PEER
         if [ -z "$CORE_PEER_TLS_ENABLED" -o "$CORE_PEER_TLS_ENABLED" = "false" ]; then
-		peer chaincode invoke -o orderer.example.com:7050 -C $CHANNEL_NAME -n mycc -c '{"Args":["invoke","a","b","10"]}' >&log.txt
+		peer chaincode invoke -o orderer.example.com:7050 -C $CHANNEL_NAME -n mycc -c '{"Args":["insert", "{\"id\":\"123456\",\"name\":\"aaa\",\"university\":\"tju\",\"degree\":\"bachelor\",\"start\":\"2015-01-01\",\"end\":\"2017-01-01\",\"educationQualifications\":[\"school\",\"junior high school\",\"high school\"],\"internInfos\":[{\"studentId\":\"123456\",\"name\":\"aaa\",\"workingId\":\"S99999\",\"company\":\"companyA\",\"department\":\"test\",\"position\":\"developer\",\"start\":\"2016-01-01\",\"end\":\"2016-03-10\"},{\"studentId\":\"123456\",\"name\":\"aaa\",\"workingId\":\"B00000\",\"company\":\"companyB\",\"department\":\"development\",\"position\":\"developer\",\"start\":\"2016-03-20\",\"end\":\"2016-06-10\"}]}"]}' >&log.txt
 	else
 		peer chaincode invoke -o orderer.example.com:7050  --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA -C $CHANNEL_NAME -n mycc -c '{"Args":["invoke","a","b","10"]}' >&log.txt
 	fi
@@ -161,19 +151,16 @@ chaincodeInvoke () {
 	echo
 }
 
-#downloadChaincodes () {
-#	CURRENT_DIR=$PWD
-#	mkdir -p /opt/gopath/src/github.com/hyperledger/fabric/examples/chaincode/go/chaincode_example02/
-#        cd /opt/gopath/src/github.com/hyperledger/fabric/examples/chaincode/go/chaincode_example02/
-#	wget https://raw.githubusercontent.com/hyperledger/fabric/master/examples/chaincode/go/chaincode_example02/chaincode_example02.go
-
-#	mkdir -p /opt/gopath/src/github.com/hyperledger/fabric/examples/chaincode/go/marbles02/
-#	cd /opt/gopath/src/github.com/hyperledger/fabric/examples/chaincode/go/marbles02/
-#	wget https://raw.githubusercontent.com/hyperledger/fabric/master/examples/chaincode/go/marbles02/marbles_chaincode.go
-#	cd $CURRENT_DIR
-#}
-
-#downloadChaincodes
+chaincodeInvokeUpdate() {
+    PEER=$1
+    setGlobals $PEER
+	peer chaincode invoke -o orderer.example.com:7050 -C $CHANNEL_NAME -n mycc -c '{"Args":["update", "{\"id\":\"123456\",\"name\":\"aaa\",\"university\":\"tongjiuniversity\",\"degree\":\"bachelor\",\"start\":\"2015-01-01\",\"end\":\"2017-01-01\",\"educationQualifications\":[\"school\",\"junior high school\",\"high school\"],\"internInfos\":[{\"studentId\":\"123456\",\"name\":\"aaa\",\"workingId\":\"S99999\",\"company\":\"companyA\",\"department\":\"test\",\"position\":\"developer\",\"start\":\"2016-01-01\",\"end\":\"2016-03-10\"},{\"studentId\":\"123456\",\"name\":\"aaa\",\"workingId\":\"B00000\",\"company\":\"companyB\",\"department\":\"development\",\"position\":\"developer\",\"start\":\"2016-03-20\",\"end\":\"2016-06-10\"}]}"]}' >&log.txt
+	res=$?
+	cat log.txt
+	verifyResult $res "Invoke execution on PEER$PEER failed "
+	echo "===================== Invoke transaction on PEER$PEER on channel '$CHANNEL_NAME' is successful ===================== "
+	echo
+}
 
 ## Create channel
 createChannel
@@ -186,7 +173,7 @@ installChaincode 0
 installChaincode 2
 
 #Instantiate chaincode on Peer2/Org1
-echo "Instantiating chaincode on Peer2/Org1 ..."
+echo "Instantiating chaincode on Peer2/Org0 ..."
 instantiateChaincode 2
 
 #Query on chaincode on Peer0/Org0
@@ -196,11 +183,15 @@ chaincodeQuery 0 100
 echo "send Invoke transaction on Peer0/Org0 ..."
 chaincodeInvoke 0
 
-## Install chaincode on Peer3/Org1
+### Install chaincode on Peer3/Org1
 installChaincode 3
 
-#Query on chaincode on Peer3/Org1, check if the result is 90
+##Query on chaincode on Peer3/Org1, check if the result is 90
 chaincodeQuery 3 90
+
+chaincodeInvokeUpdate 0
+
+chaincodeQuery 3
 
 echo
 echo "===================== All GOOD, End-2-End execution completed ===================== "

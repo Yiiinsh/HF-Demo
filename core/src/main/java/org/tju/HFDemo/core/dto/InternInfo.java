@@ -1,7 +1,5 @@
 package org.tju.HFDemo.core.dto;
 
-import java.util.Date;
-
 /**
  * Created by shaohan.yin on 03/05/2017.
  */
@@ -12,8 +10,8 @@ public class InternInfo {
     private String company;
     private String department;
     private String position;
-    private Date start;
-    private Date end;
+    private String start;
+    private String end;
 
     public String getStudentId() {
         return studentId;
@@ -55,19 +53,27 @@ public class InternInfo {
         this.department = department;
     }
 
-    public Date getStart() {
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
+    }
+
+    public String getStart() {
         return start;
     }
 
-    public void setStart(Date start) {
+    public void setStart(String start) {
         this.start = start;
     }
 
-    public Date getEnd() {
+    public String getEnd() {
         return end;
     }
 
-    public void setEnd(Date end) {
+    public void setEnd(String end) {
         this.end = end;
     }
 
