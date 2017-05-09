@@ -84,11 +84,11 @@ public class DefaultHFDConfig extends DefaultConfig implements HFDConfig {
 
     @Override
     public String getAdminName() {
-        return config.getString(USER_ADMIN_NAME, "admin");
+        return config.getString(USER_ADMIN_NAME, "123456");
     }
 
     @Override
     public String getAdminSecret() {
-        return config.getString(USER_ADMIN_SECRET, "adminpw");
+        return config.getString(USER_ADMIN_SECRET, "123456");
     }
 }

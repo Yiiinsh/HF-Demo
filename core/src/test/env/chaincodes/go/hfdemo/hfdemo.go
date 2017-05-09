@@ -203,13 +203,13 @@ func (t *TJUStudentInfoChainCode) update(stub shim.ChaincodeStubInterface, args 
 
 	// check if already exists
 	id := jsonInfo.Id
-	tryFetch, err := stub.GetState(id)
-	if err != nil {
-		return shim.Error("Fail to get by " + id + " " + err.Error())
-	} else if tryFetch == nil {
-		fmt.Println("Id " + id + " not exists.")
-		return shim.Error("Id " + id + " not exists.")
-	}
+	//tryFetch, err := stub.GetState(id)
+	//if err != nil {
+	//	return shim.Error("Fail to get by " + id + " " + err.Error())
+	//} else if tryFetch == nil {
+	//	fmt.Println("Id " + id + " not exists.")
+	//	return shim.Error("Id " + id + " not exists.")
+	//}
 
 	fmt.Println("update id:" + id + " content:" + info)
 	err = stub.PutState(id, []byte(info))

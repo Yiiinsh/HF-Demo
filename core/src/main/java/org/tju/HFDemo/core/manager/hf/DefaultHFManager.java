@@ -102,8 +102,8 @@ public class DefaultHFManager extends AbstractManager implements HFManager {
             QueryByChaincodeRequest request = client.newQueryProposalRequest();
             request.setChaincodeID(chainCodeIDs.get(STUDENT_INFO_CHAIN));
             request.setFcn("query");
-            request.setArgs(new String[]{HFOperations.QUERY.val(), id});
-
+//            request.setArgs(new String[]{HFOperations.QUERY.val(), id});
+            request.setArgs(new String[]{id});
 
             Collection<ProposalResponse> queryProposalResponses = getChain(STUDENT_INFO_CHAIN).queryByChaincode(request);
             List<ProposalResponse> successResponse = queryProposalResponses
