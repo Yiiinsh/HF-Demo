@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.tju.HFDemo.core.dto.StudentInfo;
+import org.tju.HFDemo.web.model.StudentInfoRequest;
 import org.tju.HFDemo.web.model.User;
 import org.tju.HFDemo.web.service.StudentInfoService;
 
@@ -24,12 +25,10 @@ public class StudentInfoController extends AbstractController {
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public void updateStudentInfo(@RequestBody User user, @RequestBody StudentInfo info) {
+    public void updateStudentInfo(@RequestBody StudentInfoRequest request) {
+        User user = request.getUser();
+        StudentInfo info = request.getInfo();
         studentInfoService.updateInfo(user, info);
     }
 
-    @RequestMapping(value = "/insert", method = RequestMethod.POST)
-    public void insertStudentInfo(@RequestBody User user, @RequestBody StudentInfo info) {
-        studentInfoService.insertInfo(user, info);
-    }
 }

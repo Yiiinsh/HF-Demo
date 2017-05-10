@@ -3,7 +3,7 @@ index_module.controller('IndexCtl', ['$rootScope', '$scope','$window', 'toastr',
     
     $scope.currentUser = $rootScope.currentUser;
     
-    $scope.logout = logout;
+    $rootScope.logout = logout;
     
     init();
 

@@ -3,6 +3,10 @@ services.service('StudentInfoService', ['$resource', '$q', function ($resource, 
         getStudentInfo: {
             method: 'POST',
             url: '/info/student/get'
+        },
+        updateStudentInfo: {
+            method: 'POST',
+            url: '/info/student/update'
         }
     });
 
@@ -18,8 +22,25 @@ services.service('StudentInfoService', ['$resource', '$q', function ($resource, 
         });
         return d.promise;
     }
+    
+    function updateStudentInfo(userId, token, info) {
+        var d = $q.defer();
+        resource.updateStudentInfo({},{
+            user: {
+                userId: userId,
+                token: token
+            },
+            info: info
+        }, function (result) {
+            d.resolve(result);
+        }, function (result) {
+            d.reject(result);
+        });
+        return d.promise;
+    }
 
     return {
-        getStudentInfo: getStudentInfo
+        getStudentInfo: getStudentInfo,
+        updateStudentInfo: updateStudentInfo
     }
 }]);

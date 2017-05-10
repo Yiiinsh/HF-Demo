@@ -37,7 +37,7 @@ services:
       file: peer-base/peer-base-no-tls.yaml
       service: peer-base
     environment:
-      - CORE_LOGGING_LEVEL=INFO
+#      - CORE_LOGGING_LEVEL=INFO
       - CORE_PEER_ID=peer0.org1.example.com
       - CORE_PEER_LOCALMSPID=Org0MSP
     volumes:

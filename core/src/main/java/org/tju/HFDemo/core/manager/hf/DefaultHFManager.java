@@ -101,7 +101,7 @@ public class DefaultHFManager extends AbstractManager implements HFManager {
             client.setUserContext(user);
             QueryByChaincodeRequest request = client.newQueryProposalRequest();
             request.setChaincodeID(chainCodeIDs.get(STUDENT_INFO_CHAIN));
-            request.setFcn("query");
+            request.setFcn(HFOperations.QUERY.val());
 //            request.setArgs(new String[]{HFOperations.QUERY.val(), id});
             request.setArgs(new String[]{id});
 
@@ -162,8 +162,8 @@ public class DefaultHFManager extends AbstractManager implements HFManager {
             client.setUserContext(user);
             TransactionProposalRequest request = client.newTransactionProposalRequest();
             request.setChaincodeID(chainCodeIDs.get(STUDENT_INFO_CHAIN));
-            request.setFcn("invoke");
-            request.setArgs(new String[]{HFOperations.UPDATE.val(), gson.toJson(studentInfo)});
+            request.setFcn(HFOperations.UPDATE.val());
+            request.setArgs(new String[]{gson.toJson(studentInfo)});
 
             Collection<ProposalResponse> responses = getChain(STUDENT_INFO_CHAIN).sendTransactionProposal(request);
             List<ProposalResponse> successResponse = responses
