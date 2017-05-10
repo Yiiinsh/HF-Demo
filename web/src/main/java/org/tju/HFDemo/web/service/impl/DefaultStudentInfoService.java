@@ -24,13 +24,7 @@ public class DefaultStudentInfoService extends AbstractService implements Studen
 
     @Override
     public StudentInfo getInfo(User user) {
-        try {
-            return hfManager.getStudentInfo(tokenManager.getHFUserFromToken(user.getUserId(), user.getToken()),
-                    user.getUserId());
-        } catch (ExecutionException e) {
-            logger.error("[DefaultStudentInfoService][getInfo][fail]{}", user.getUserId(), e);
-            throw new HFDRuntimeException(e.getMessage());
-        }
+        return hfManager.getStudentInfo(getUser(user), user.getUserId());
     }
 
     @Override
@@ -40,23 +34,23 @@ public class DefaultStudentInfoService extends AbstractService implements Studen
 
     @Override
     public void updateInfo(User user, StudentInfo info) {
-        try {
-            hfManager.updateStudentInfo(tokenManager.getHFUserFromToken(user.getUserId(), user.getToken()),
-                    info);
-        } catch (ExecutionException e) {
-            logger.error("[DefaultStudentInfoService][update][fail]{}", user.getUserId(), e);
-            throw new HFDRuntimeException(e.getMessage());
-        }
+        hfManager.updateStudentInfo(getUser(user), info);
     }
 
     @Override
     public void removeInfo(User user) {
-        try {
-            hfManager.removeStudentInfo(tokenManager.getHFUserFromToken(user.getUserId(), user.getToken()),
-                    user.getUserId());
-        } catch (ExecutionException e) {
-            logger.error("[DefaultStudentInfoService][remove][fail]{}", user.getUserId(), e);
-            throw new HFDRuntimeException(e.getMessage());
-        }
+        hfManager.removeStudentInfo(getUser(user), user.getUserId());
     }
+
+    private org.tju.HFDemo.core.role.User getUser(User user) {
+        if (tokenManager.checkToken(user.getUserId(), user.getToken())) {
+            try {
+                return tokenManager.getHFUserFromToken(user.getUserId(), user.getToken());
+            } catch (ExecutionException e) {
+                throw new HFDRuntimeException(e.getMessage());
+            }
+        }
+        throw new HFDRuntimeException("Token expired.Please re-login.");
+    }
+
 }

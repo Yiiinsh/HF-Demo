@@ -1,7 +1,8 @@
-index_module.controller('StudentInfoUpdateCtl', ['$rootScope', '$scope','$window', 'toastr', 'AppUtil', 'StudentInfoService',
-    function ($rootScope, $scope, $window, toastr, AppUtil, StudentInfoService) {
+index_module.controller('StudentInfoUpdateCtl', ['$rootScope', '$scope','$window', '$cookies', 'toastr', 'AppUtil', 'StudentInfoService',
+    function ($rootScope, $scope, $window, $cookies, toastr, AppUtil, StudentInfoService) {
 
-        $scope.currentUser = $rootScope.currentUser;
+        $rootScope.currentUser = $cookies.getObject('currentUser');
+        $scope.currentUser = $cookies.getObject('currentUser');
         $scope.newInternInfo = {}
 
         $scope.update = update;
@@ -12,6 +13,7 @@ index_module.controller('StudentInfoUpdateCtl', ['$rootScope', '$scope','$window
         init();
 
         function init() {
+            $scope.currentUser = $cookies.getObject('currentUser');
             StudentInfoService.getStudentInfo($scope.currentUser.id, $scope.currentUser.token)
                 .then(function(result) {
                     $scope.studentInfo = result;

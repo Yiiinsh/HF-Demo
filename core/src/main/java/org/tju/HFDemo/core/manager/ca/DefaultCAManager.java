@@ -39,7 +39,7 @@ public class DefaultCAManager extends AbstractManager implements CAManager {
             user.setEnrollment(hfcaClient.enroll(userName, SecretUtil.secretHash(passwd)));
         } catch (Exception e) {
             logger.error("[enroll][fail]", e);
-            throw new InvalidEnrollException(String.format("Fail to enroll user:%s with password:%s", userName, passwd));
+            throw new InvalidEnrollException(String.format("Fail to enroll user:%s", userName));
         }
         return user;
     }
