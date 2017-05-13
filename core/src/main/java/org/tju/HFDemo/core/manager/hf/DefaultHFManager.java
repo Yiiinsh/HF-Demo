@@ -14,10 +14,7 @@ import org.tju.HFDemo.core.role.DefaultUser;
 import org.tju.HFDemo.core.role.User;
 
 import java.lang.reflect.Type;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -206,6 +203,22 @@ public class DefaultHFManager extends AbstractManager implements HFManager {
         } catch (Exception e) {
             logger.error("[DefaultHFManager][UpdateStudentInfo][fail]",e);
         }
+    }
+
+    @Override
+    public List<BlockInfo> getBlocks() {
+        List<BlockInfo> res = new LinkedList<>();
+        try {
+            client.setUserContext(admin);
+            BlockchainInfo chainInfo = client.getChain(STUDENT_INFO_CHAIN).queryBlockchainInfo();
+            long blockCnt = chainInfo.getHeight();
+            for(int cnt = 0; cnt != blockCnt; ++cnt) {
+                res.add(client.getChain(STUDENT_INFO_CHAIN).queryBlockByNumber(cnt));
+            }
+        } catch (Exception e) {
+            logger.error("[DefaultHFManager][getBlocks][fail]", e);
+        }
+        return res;
     }
 
 }

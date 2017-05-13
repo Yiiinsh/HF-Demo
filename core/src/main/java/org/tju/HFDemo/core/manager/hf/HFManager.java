@@ -1,5 +1,6 @@
 package org.tju.HFDemo.core.manager.hf;
 
+import org.hyperledger.fabric.sdk.BlockInfo;
 import org.hyperledger.fabric.sdk.Chain;
 import org.tju.HFDemo.core.dto.StudentInfo;
 import org.tju.HFDemo.core.role.User;
@@ -15,4 +16,5 @@ public interface HFManager {
     List<StudentInfo> getStudentInfoBatch(User user, String startId, String endId);
     void updateStudentInfo(User user, StudentInfo studentInfo);
     void removeStudentInfo(User user, String id);
+    List<BlockInfo> getBlocks();
 }

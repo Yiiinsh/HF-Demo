@@ -69,7 +69,7 @@ public class HFSDKTest extends AbstractTest {
             RegistrationRequest rr = new RegistrationRequest(getConfig(TEST_USER_USERA_NAME_KEY), getConfig(TEST_USER_USERA_AFFILIATION_KEY));
             rr.setMaxEnrollments(0);
             rr.setSecret(getConfig(TEST_USER_USERA_PASSWORD_KEY));;
-            caClient.register(rr, admin);
+//            caClient.register(rr, admin);
             userA = new TestUser(getConfig(TEST_USER_USERA_NAME_KEY));
             userA.setMSPID(getConfig(TEST_USER_MSPID_KEY));
             userA.setEnrollment(caClient.enroll(getConfig(TEST_USER_USERA_NAME_KEY), getConfig(TEST_USER_USERA_PASSWORD_KEY)));
@@ -156,6 +156,18 @@ public class HFSDKTest extends AbstractTest {
         } catch (Exception e) {
             logger.error("[invokeTest][fail]", e);
             fail();
+        }
+    }
+
+    @Test
+    public void queryBlockChainInfoTest() {
+        try {
+            client.setUserContext(userA);
+
+            BlockchainInfo info = client.getChain(getConfig(TEST_CHAIN_NAME_KEY)).queryBlockchainInfo();
+            logger.info("{}", info);
+        } catch (Exception e) {
+            logger.error("[queryBlockChainInfoTest][fail]", e);
         }
     }
 
