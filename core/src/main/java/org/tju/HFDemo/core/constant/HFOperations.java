@@ -11,7 +11,8 @@ public enum HFOperations {
     REMOVE("remove"),
     REMOVE_BATCH("removeBatch"),
     QUERY("query"),
-    QUERY_BATCH("queryBatch");
+    QUERY_BATCH("queryBatch"),
+    QUERY_RECRUITMENT("queryRecruitment");
 
     private String value;
 

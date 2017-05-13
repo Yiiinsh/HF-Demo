@@ -18,7 +18,7 @@ public class RecruitmentInfoController extends AbstractController {
     @Autowired
     private RecruitmentInfoService recruitmentInfoService;
 
-    @RequestMapping(value = "/get", method = RequestMethod.GET)
+    @RequestMapping(value = "", method = RequestMethod.GET)
     public List<RecruitmentInfo> getRecruitmentInfo() {
         return recruitmentInfoService.getRecruitmentInfos();
     }

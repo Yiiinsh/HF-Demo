@@ -30,5 +30,10 @@ index_module.config(function ($stateProvider, $urlRouterProvider) {
             url: '/blockchain/info',
             templateUrl: 'views/index/blockchain_info.html',
             controller: 'BlockchainInfoCtl'
+        })
+        .state('recruitment_info', {
+            url: '/recruitment/info',
+            templateUrl: 'views/index/recruitment_info.html',
+            controller: 'RecruitmentInfoCtl'
         });
 });

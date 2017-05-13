@@ -33,6 +33,17 @@ type InternInfo struct {
 	End string `json:"end"`
 }
 
+type RecruitmentInfo struct {
+	Company string `json:"company"`
+	Department string `json:"department"`
+	Position string `json:"position"`
+	Description string `json:"description"`
+	HeadCnt string `json:"headCnt"`
+	Start string `json:"start"`
+	End string `json:"end"`
+	Contact string `json:"contact"`
+}
+
 func main() {
 	err := shim.Start(new(TJUStudentInfoChainCode))
 	if err != nil {
@@ -66,6 +77,10 @@ func (t *TJUStudentInfoChainCode) Invoke(stub shim.ChaincodeStubInterface) pb.Re
 		return t.updateBatch(stub, args)
 	} else if function == "query" {
 		return t.query(stub, args)
+	} else if function == "queryRecruitment" {
+		return t.queryRecruitment(stub, args)
+	} else if function == "insertRecruitment" {
+		return t.insertRecruitment(stub, args)
 	}
 
 
@@ -294,6 +309,48 @@ func (t *TJUStudentInfoChainCode) query(stub shim.ChaincodeStubInterface, args [
 	fmt.Printf("query responses:%s\n", string(res))
 
 	return shim.Success(res)
+}
+
+func (t *TJUStudentInfoChainCode) insertRecruitment(stub shim.ChaincodeStubInterface, args[] string) pb.Response {
+	if len(args) < 1 {
+		return shim.Error("Incorrect number of arguments.Expecting 1")
+	}
+	content := args[0]
+
+	previous, err := stub.GetState("recruitment")
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+	if previous == nil {
+		emptySlice := []RecruitmentInfo{}
+		var jsonContent RecruitmentInfo
+		_ = json.Unmarshal([]byte(content), &jsonContent)
+		emptySlice = append(emptySlice, jsonContent)
+		val,_ := json.Marshal(emptySlice)
+		fmt.Printf("Init with:%s\n", val)
+		stub.PutState("recruitment", []byte(val))
+	} else {
+		var slice []RecruitmentInfo
+		_ = json.Unmarshal(previous, &slice)
+		fmt.Printf("Already init, Previous:%s\n", slice)
+
+		var jsonVal RecruitmentInfo
+		_ = json.Unmarshal([]byte(content), &jsonVal)
+
+		slice = append(slice, jsonVal)
+		val,_ := json.Marshal(slice)
+		stub.PutState("recruitment", []byte(val))
+	}
+
+	return shim.Success(nil)
+}
+
+func (t *TJUStudentInfoChainCode) queryRecruitment(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+	res, err := stub.GetState("recruitment")
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+	return shim.Success(res);
 }
 
 func (t *TJUStudentInfoChainCode) queryBatch(stub shim.ChaincodeStubInterface, args []string) pb.Response {

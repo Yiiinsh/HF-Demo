@@ -1,5 +1,6 @@
 package org.tju.HFDemo.core.manager.hf;
 
+import com.google.common.collect.Lists;
 import com.google.common.reflect.TypeToken;
 import org.hyperledger.fabric.sdk.*;
 import org.hyperledger.fabric.sdk.exception.InvalidArgumentException;
@@ -7,6 +8,7 @@ import org.hyperledger.fabric.sdk.exception.TransactionException;
 import org.hyperledger.fabric.sdk.security.CryptoSuite;
 import org.hyperledger.fabric_ca.sdk.HFCAClient;
 import org.tju.HFDemo.core.constant.HFOperations;
+import org.tju.HFDemo.core.dto.RecruitmentInfo;
 import org.tju.HFDemo.core.dto.StudentInfo;
 import org.tju.HFDemo.core.exception.OperationFailException;
 import org.tju.HFDemo.core.manager.AbstractManager;
@@ -219,6 +221,34 @@ public class DefaultHFManager extends AbstractManager implements HFManager {
             logger.error("[DefaultHFManager][getBlocks][fail]", e);
         }
         return res;
+    }
+
+    @Override
+    public List<RecruitmentInfo> getRecruitmentInfos() {
+        try {
+            client.setUserContext(admin);
+
+            QueryByChaincodeRequest request = client.newQueryProposalRequest();
+            request.setChaincodeID(chainCodeIDs.get(STUDENT_INFO_CHAIN));
+            request.setFcn(HFOperations.QUERY_RECRUITMENT.val());
+            request.setArgs(new String[]{});
+
+            Collection<ProposalResponse> queryProposalResponses = getChain(STUDENT_INFO_CHAIN).queryByChaincode(request);
+            List<ProposalResponse> successResponse = queryProposalResponses
+                    .stream()
+                    .filter((response) -> response.getStatus().equals(ProposalResponse.Status.SUCCESS))
+                    .collect(Collectors.toList());
+            if(!successResponse.isEmpty()) {
+                String result = successResponse.get(0).getProposalResponse().getResponse().getPayload().toStringUtf8();
+                Type listType = new TypeToken<List<RecruitmentInfo>>(){}.getType();
+                return gson.fromJson(result, listType);
+            } else {
+                return Lists.newLinkedList();
+            }
+        } catch (Exception e) {
+            logger.error("[DefaultHFManager][getRecruitmentInfos][fail]", e);
+        }
+        return Lists.newLinkedList();
     }
 
 }

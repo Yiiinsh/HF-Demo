@@ -1,8 +1,7 @@
 #!/bin/bash
 
-CHANNEL_NAME="$1"
-: ${CHANNEL_NAME:="mychannel"}
-: ${TIMEOUT:="60"}
+CHANNEL_NAME=mychannel2
+TIMEOUT=60
 COUNTER=0
 MAX_RETRY=5
 ORDERER_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/example.com/orderers/orderer.example.com/cacerts/example.com-cert.pem
@@ -54,7 +53,7 @@ createChannel() {
 	env |grep CORE
 
         if [ -z "$CORE_PEER_TLS_ENABLED" -o "$CORE_PEER_TLS_ENABLED" = "false" ]; then
-		peer channel create -o orderer.example.com:7050 -c $CHANNEL_NAME -f channel.tx >&log.txt
+            peer channel create -o orderer.example.com:7050 -c $CHANNEL_NAME -f channel.tx >&log.txt
 	else
 		peer channel create -o orderer.example.com:7050 -c $CHANNEL_NAME -f channel.tx --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA >&log.txt
 	fi

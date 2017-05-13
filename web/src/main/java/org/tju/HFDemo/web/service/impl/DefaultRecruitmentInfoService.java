@@ -19,6 +19,6 @@ public class DefaultRecruitmentInfoService extends AbstractService implements Re
 
     @Override
     public List<RecruitmentInfo> getRecruitmentInfos() {
-        return null;
+        return hfManager.getRecruitmentInfos();
     }
 }

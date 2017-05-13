@@ -127,7 +127,6 @@ services:
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     command: /bin/bash -c './scripts/demoscript.sh ${CHANNEL_NAME}; /bin/bash'
 #    command: /bin/bash -c './scripts/script.sh ${CHANNEL_NAME}; /bin/bash'
-#    command: /bin/bash
     volumes:
         - /var/run/:/host/var/run/
         - ./chaincodes:/opt/gopath/src/github.com/hyperledger/fabric/examples/chaincode

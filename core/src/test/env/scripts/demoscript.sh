@@ -162,6 +162,62 @@ chaincodeInvokeUpdate() {
 	echo
 }
 
+chaincodeInsertRecruitmentInfo() {
+    PEER=$1
+    setGlobals $PEER
+
+	peer chaincode invoke -o orderer.example.com:7050 -C $CHANNEL_NAME -n mycc -c '{"Args":["insertRecruitment", "{\"company\":\"companyA\",\"department\":\"infrastructure\",\"position\":\"intern\",\"description\":\"Java intern wanted;Knowledge on Spring will be preferred\",\"headCnt\":\"3\",\"start\":\"2017-05-22\",\"end\":\"2017-06-22\",\"contact\":\"noexist@companyA.com\"}"]}' >&log.txt
+	res=$?
+	cat log.txt
+	verifyResult $res "Invoke execution on PEER$PEER failed "
+	sleep 3
+
+	peer chaincode invoke -o orderer.example.com:7050 -C $CHANNEL_NAME -n mycc -c '{"Args":["insertRecruitment", "{\"company\":\"companyB\",\"department\":\"ops\",\"position\":\"intern\",\"description\":\"Docker intern wanted;Knowledge on kubernets will be preferred\",\"headCnt\":\"2\",\"start\":\"2017-05-12\",\"end\":\"2017-05-22\",\"contact\":\"noexist@companyB.com\"}"]}' >&log.txt
+	res=$?
+	cat log.txt
+	verifyResult $res "Invoke execution on PEER$PEER failed "
+	sleep 3
+
+	peer chaincode invoke -o orderer.example.com:7050 -C $CHANNEL_NAME -n mycc -c '{"Args":["insertRecruitment", "{\"company\":\"companyC\",\"department\":\"frontend\",\"position\":\"intern\",\"description\":\"Frontend intern wanted;Knowledge on Vue will be preferred\",\"headCnt\":\"1\",\"start\":\"2017-02-22\",\"end\":\"2017-03-22\",\"contact\":\"noexist@companyC.com\"}"]}' >&log.txt
+	res=$?
+	cat log.txt
+	verifyResult $res "Invoke execution on PEER$PEER failed "
+	sleep 3
+
+	peer chaincode invoke -o orderer.example.com:7050 -C $CHANNEL_NAME -n mycc -c '{"Args":["insertRecruitment", "{\"company\":\"companyD\",\"department\":\"test\",\"position\":\"intern\",\"description\":\"Test intern wanted;Knowledge on selenium will be preferred\",\"headCnt\":\"4\",\"start\":\"2017-01-22\",\"end\":\"2017-01-25\",\"contact\":\"noexist@companyD.com\"}"]}' >&log.txt
+	res=$?
+	cat log.txt
+	verifyResult $res "Invoke execution on PEER$PEER failed "
+	sleep 3
+
+	peer chaincode invoke -o orderer.example.com:7050 -C $CHANNEL_NAME -n mycc -c '{"Args":["insertRecruitment", "{\"company\":\"companyE\",\"department\":\"dba\",\"position\":\"intern\",\"description\":\"DBA intern wanted;Knowledge on MySQL will be preferred\",\"headCnt\":\"9\",\"start\":\"2017-05-23\",\"end\":\"2017-08-22\",\"contact\":\"noexist@companyE.com\"}"]}' >&log.txt
+	res=$?
+	cat log.txt
+	verifyResult $res "Invoke execution on PEER$PEER failed "
+	sleep 3
+
+	echo "===================== Invoke transaction on PEER$PEER on channel '$CHANNEL_NAME' is successful ===================== "
+	echo
+}
+
+chaincodeQueryRecruitment() {
+  PEER=$1
+  echo "===================== Querying on PEER$PEER on channel '$CHANNEL_NAME'... ===================== "
+  setGlobals $PEER
+  local rc=1
+  local starttime=$(date +%s)
+
+  while test "$(($(date +%s)-starttime))" -lt "$TIMEOUT" -a $rc -ne 0
+  do
+     sleep 3
+     echo "Attempting to Query PEER$PEER ...$(($(date +%s)-starttime)) secs"
+     peer chaincode query -C $CHANNEL_NAME -n mycc -c '{"Args":["queryRecruitment"]}' >&log.txt
+     test $? -eq 0 && VALUE=$(cat log.txt | awk '/Query Result/ {print $NF}')
+     let rc=0
+  done
+  echo
+  cat log.txt
+}
 ## Create channel
 createChannel
 
@@ -192,6 +248,11 @@ chaincodeQuery 3 90
 chaincodeInvokeUpdate 0
 
 chaincodeQuery 3
+
+chaincodeInsertRecruitmentInfo 0
+
+chaincodeQueryRecruitment 0
+
 
 echo
 echo "===================== All GOOD, End-2-End execution completed ===================== "

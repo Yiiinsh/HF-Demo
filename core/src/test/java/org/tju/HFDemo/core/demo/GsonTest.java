@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import org.junit.Test;
 import org.tju.HFDemo.core.AbstractTest;
 import org.tju.HFDemo.core.dto.InternInfo;
+import org.tju.HFDemo.core.dto.RecruitmentInfo;
 import org.tju.HFDemo.core.dto.StudentInfo;
 
 /**
@@ -49,5 +50,20 @@ public class GsonTest extends AbstractTest {
         stu.addInternInfos(internB);
 
         logger.info("{}", gson.toJson(stu));
+    }
+
+    @Test
+    public void gsonTest2() {
+        RecruitmentInfo info = new RecruitmentInfo();
+        info.setCompany("companyA");
+        info.setDepartment("infrastructure");
+        info.setDescription("Java intern wanted;Knowledge on Spring will be preferred");
+        info.setHeadCnt(3);
+        info.setPosition("intern");
+        info.setStart("2017-05-22");
+        info.setEnd("2017-06-22");
+        info.setContact("noexist@companyA.com");
+
+        logger.info("{}", gson.toJson(info));
     }
 }
