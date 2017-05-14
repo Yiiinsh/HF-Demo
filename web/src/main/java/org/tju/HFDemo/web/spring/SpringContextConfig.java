@@ -7,6 +7,7 @@ import org.tju.HFDemo.core.manager.ca.DefaultCAManager;
 import org.tju.HFDemo.core.manager.hf.DefaultHFManager;
 import org.tju.HFDemo.core.manager.hf.HFManager;
 import org.tju.HFDemo.web.manager.TokenManager;
+import org.tju.HFDemo.web.util.RankingUtil;
 
 /**
  * Created by shaohan.yin on 05/05/2017.
@@ -26,5 +27,10 @@ public class SpringContextConfig {
     @Bean
     public TokenManager getTokenManager() {
         return new TokenManager();
+    }
+
+    @Bean
+    public RankingUtil getRankingUtil() {
+        return new RankingUtil();
     }
 }
