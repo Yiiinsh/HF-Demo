@@ -53,7 +53,8 @@ public class DefaultCAManager extends AbstractManager implements CAManager {
             hfcaClient.register(rr, registar);
         } catch (Exception e) {
             logger.error("[register][fail]UserName:{}, Registar:{}", userName, registar.getName());
-            throw new HFDRuntimeException(String.format("Fail to register user:%s, registar:%s", userName, registar.getName()));
+            throw new HFDRuntimeException(String.format("Fail to register user:%s, registar:%s", userName,
+                    registar.getName()));
         }
 
     }

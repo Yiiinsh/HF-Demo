@@ -15,15 +15,15 @@ index_module.controller('StudentInfoCtl', ['$rootScope', '$scope','$window', '$i
             });
     }
 
-    // var cnt = 0;
-    // $scope.refreshStudentInfo = $interval(function() {
-    //     init();
-    //     ++cnt;
-    //     if(cnt == 4) {
-    //         $interval.cancel($scope.refreshStudentInfo);
-    //     }
-    // } , 2000);
-    // // $scope.$on('$destroy', function() {
-    // //     $interval.cancel($scope.refreshStudentInfo);
-    // // });
+    var cnt = 0;
+    $scope.refreshStudentInfo = $interval(function() {
+        init();
+        ++cnt;
+        if(cnt == 4) {
+            $interval.cancel($scope.refreshStudentInfo);
+        }
+    } , 1000);
+    // $scope.$on('$destroy', function() {
+    //     $interval.cancel($scope.refreshStudentInfo);
+    // });
 }]);

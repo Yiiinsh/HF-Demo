@@ -169,11 +169,11 @@ public class DefaultHFManager extends AbstractManager implements HFManager {
                     .filter((response) -> response.getStatus().equals(ProposalResponse.Status.SUCCESS))
                     .collect(Collectors.toList());
             if(!successResponse.isEmpty()) {
-                // TODO: handle async response
                 getChain(STUDENT_INFO_CHAIN).sendTransaction(successResponse);
             } else {
                 logger.error("[DefaultHFManager][UpdateStudentInfo][fail]User:{}, Info:{}", user.getName(), studentInfo);
-                throw new OperationFailException(String.format("Fail to update.User:%s, Info:%s", user.getName(), gson.toJson(studentInfo)));
+                throw new OperationFailException(String.format("Fail to update.User:%s, Info:%s", user.getName(),
+                        gson.toJson(studentInfo)));
             }
         } catch (Exception e) {
             logger.error("[DefaultHFManager][UpdateStudentInfo][fail]",e);

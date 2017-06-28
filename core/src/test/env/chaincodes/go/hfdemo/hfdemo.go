@@ -53,14 +53,16 @@ func main() {
 
 // Init initializes chaincode
 func (t *TJUStudentInfoChainCode) Init(stub shim.ChaincodeStubInterface) pb.Response {
-	fmt.Printf("Init demo")
+	fmt.Println("-Init Start")
+	fmt.Println("-Init End")
+	fmt.Println()
 	return shim.Success(nil)
 }
 
 // Invoke - entry point for invocations
 func (t *TJUStudentInfoChainCode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 	function, args := stub.GetFunctionAndParameters()
-	fmt.Println("invoke is running:" + function)
+	//fmt.Println("invoke is running:" + function)
 
 	// function handler
 	if function == "insert"  {
@@ -112,12 +114,14 @@ func (t *TJUStudentInfoChainCode) insert(stub shim.ChaincodeStubInterface, args 
 		return shim.Error("Id " + id + " already exists.")
 	}
 
-	fmt.Println("insert id:" + id + " content:" + info)
+	fmt.Println("-Insert Start")
+	fmt.Println("Insert id:" + id + " content:" + info)
 	err = stub.PutState(id, []byte(info))
 	if err != nil {
 		return shim.Error(err.Error())
 	}
-	fmt.Println("- insert success")
+	fmt.Println("- Insert Success")
+	fmt.Println()
 	return shim.Success(nil)
 }
 
@@ -218,6 +222,9 @@ func (t *TJUStudentInfoChainCode) update(stub shim.ChaincodeStubInterface, args 
 
 	// check if already exists
 	id := jsonInfo.Id
+	previous, _ := stub.GetState(id)
+	var previousJsonInfo Student
+	_ = json.Unmarshal(previous, &previousJsonInfo)
 	//tryFetch, err := stub.GetState(id)
 	//if err != nil {
 	//	return shim.Error("Fail to get by " + id + " " + err.Error())
@@ -226,13 +233,28 @@ func (t *TJUStudentInfoChainCode) update(stub shim.ChaincodeStubInterface, args 
 	//	return shim.Error("Id " + id + " not exists.")
 	//}
 
-	fmt.Println("update id:" + id + " content:" + info)
+	fmt.Println("-Update Start")
+	fmt.Println("Update id:" + id + "\n")
+	fmt.Println("Internship Update Verification Start")
+	verifyInternship(previousJsonInfo, jsonInfo)
+	fmt.Println("Internship Update Verification End")
 	err = stub.PutState(id, []byte(info))
 	if err != nil {
 		return shim.Error(err.Error())
 	}
-	fmt.Println("- update success")
+	fmt.Println("-Update Success")
+	fmt.Println()
 	return shim.Success(nil)
+}
+
+func verifyInternship(previous Student, after Student) {
+	fmt.Printf("Previous:%s\n", previous.InternInfos)
+	fmt.Printf("After:%s\n", after.InternInfos)
+	fmt.Println("Verify Service Start")
+}
+
+func verifyService() {
+	fmt.Println("Verify Success")
 }
 
 func (t *TJUStudentInfoChainCode) updateBatch(stub shim.ChaincodeStubInterface, args []string) pb.Response {
@@ -278,7 +300,7 @@ func (t *TJUStudentInfoChainCode) updateBatch(stub shim.ChaincodeStubInterface, 
 // Query - query of the chaincode
 func (t *TJUStudentInfoChainCode) Query(stub shim.ChaincodeStubInterface) pb.Response {
 	function, args := stub.GetFunctionAndParameters()
-	fmt.Println("query is running:" + function)
+	//fmt.Println("query is running:" + function)
 
 	// function handler
 	if function == "query" {
@@ -298,7 +320,7 @@ func (t *TJUStudentInfoChainCode) query(stub shim.ChaincodeStubInterface, args [
 	}
 	id := args[0]
 
-	fmt.Printf("- query on:\n%s\n", id)
+	fmt.Printf("- Query on:%s\n", id)
 	res, err := stub.GetState(id)
 	if err != nil {
 		return shim.Error(err.Error())
@@ -306,7 +328,8 @@ func (t *TJUStudentInfoChainCode) query(stub shim.ChaincodeStubInterface, args [
 	if res == nil {
 		return shim.Error("Fail to get state for " + id)
 	}
-	fmt.Printf("query responses:%s\n", string(res))
+	fmt.Printf("-Query responses:%s\n", string(res))
+	fmt.Println()
 
 	return shim.Success(res)
 }

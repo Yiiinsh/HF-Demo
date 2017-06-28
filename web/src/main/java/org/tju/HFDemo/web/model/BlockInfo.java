@@ -6,7 +6,7 @@ package org.tju.HFDemo.web.model;
 public class BlockInfo {
     private long number;
     private String previousHash;
-    private String data;
+        private String data;
 
     public long getNumber() {
         return number;
